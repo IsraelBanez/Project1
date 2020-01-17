@@ -22,7 +22,16 @@ class Node:
 # If StrList is empty (None), return None
 # Must be implemented recursively
 def first_string(strlist):
-    pass
+    if strlist is None:
+        return None
+    if strlist.rest is None:
+        return strlist.value
+    if strlist.value < strlist.rest.value:
+         temp = strlist.value
+         strlist.value = strlist.rest.value
+         strlist.rest.value =temp
+    return first_string(strlist.rest)
+
 
 # StrList -> (StrList, StrList, StrList)
 # Returns a tuple with 3 new StrLists,
@@ -31,4 +40,13 @@ def first_string(strlist):
 # the third with strings that don't start with an alpha character
 # Must be implemented recursively
 def split_list(strlist):
-    pass
+    if strlist is None:
+        return None, None, None
+    rlist = split_list(strlist.rest)
+    if strlist.value[0] in 'a,e,i,o,u,A,E,I,O,U':
+        return Node(strlist.value, rlist[0]), rlist[1], rlist[2]
+    if strlist.value[0].isalpha() and not strlist.value[0] in 'a,e,i,o,u,A,E,I,O,U':
+        return rlist[0], Node(strlist.value, rlist[1]), rlist[2]
+    if not strlist.value[0].isalpha():
+        return rlist[0], rlist[1], Node(strlist.value, rlist[2])
+    return rlist[0], rlist[1], rlist[2]
